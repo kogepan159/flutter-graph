@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_graph/page/top/top_view_model.dart';
+import 'package:flutter_graph/widget/fl_chart.dart';
 
 class TopPage extends StatefulWidget {
   const TopPage({super.key, required this.title});
@@ -37,7 +38,7 @@ class _TopPageState extends State<TopPage> {
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body: Center(
+      body: SingleChildScrollView(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
         child: Column(
@@ -70,6 +71,7 @@ class _TopPageState extends State<TopPage> {
             Text(
               '${viewModel.titles}',
             ),
+            const FlChart(),
           ],
         ),
       ),
