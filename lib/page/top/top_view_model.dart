@@ -33,7 +33,9 @@ class TopViewModel {
           titles.add(utf8.decode(element.runes.toList()));
         }
       } else {
-        names.add(utf8.decode(contactData[1].runes.toList()));
+        final name = utf8.decode(contactData[1].runes.toList());
+        names.add(name);
+        contactData[1] = name;
         items.add(contactData);
       }
     }
