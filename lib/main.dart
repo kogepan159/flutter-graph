@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const TopPage(title: 'Flutter Demo Home Page'),
+      home: const TopPage(title: 'Googleアンケート回答表'),
     );
   }
 }

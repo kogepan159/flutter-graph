@@ -1,3 +1,4 @@
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_graph/page/top/top_view_model.dart';
@@ -6,7 +7,6 @@ import 'package:flutter_graph/widget/fl_chart.dart';
 class TopPage extends StatefulWidget {
   const TopPage({super.key, required this.title});
 
-
   final String title;
 
   @override
@@ -14,72 +14,106 @@ class TopPage extends StatefulWidget {
 }
 
 class _TopPageState extends State<TopPage> {
-  int _counter = 0;
   TopViewModel viewModel = TopViewModel();
+
   void _incrementCounter() async {
     await viewModel.csvImport();
-    setState(()  {
-      _counter++;
-
-    });
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
+    List<Widget> children = <Widget>[
+      const Text(
+        '該当者',
+      ),
+      if (viewModel.names.isNotEmpty)
+        DropdownButton(
+          items: makeDropdownMenuItems(),
+          onChanged: (String? value) {
+            setState(() {
+              viewModel.isSelectedItem = value;
+            });
+          },
+          value: viewModel.isSelectedItem,
+        ),
+      const SizedBox(
+        height: 32,
+      ),
+    ];
+
+    children += makeAnswerList();
+
     return Scaffold(
       appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
       body: SingleChildScrollView(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-            Text(
-              '${viewModel.names}',
-            ),
-            Text(
-              '${viewModel.titles}',
-            ),
-            const FlChart(),
-          ],
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: children,
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
         tooltip: 'Increment',
-        child: const Icon(Icons.add),
+        child: const Icon(Icons.upload_file),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
+  }
+
+  List<DropdownMenuItem<String>> makeDropdownMenuItems() {
+    List<DropdownMenuItem<String>> items = [];
+    for (String name in viewModel.names) {
+      items.add(DropdownMenuItem(
+        value: name,
+        child: Text(name),
+      ));
+    }
+    return items;
+  }
+
+  List<Widget> makeAnswerList() {
+    if (viewModel.names.isEmpty) return [];
+    List<Widget> items = [];
+    var myItems = viewModel.items
+        .where((element) => element[1] == viewModel.isSelectedItem);
+
+    for (int i = 0; i < viewModel.titles.length - 1; i++) {
+      if(i == 1) continue;
+      items.add(Text(
+        viewModel.titles[i],
+        style: const TextStyle(
+          fontWeight: FontWeight.bold,
+        ),
+      ));
+      items.add(const SizedBox(height: 8));
+      // ignore: unnecessary_null_comparison
+      if (double.tryParse(myItems.first[i]) != null) {
+        items.add(makeAnswerGraph(myItems, i));
+      } else {
+        items += makeAnswerString(myItems, i);
+      }
+      items.add(const SizedBox(height: 16));
+    }
+    return items;
+  }
+
+  Widget makeAnswerGraph(Iterable<List<String>> myItems, int section) {
+    List<double> records = [];
+    for (List<String> item in myItems) {
+      records.add(double.parse(item[section]));
+    }
+    return  FlChart(records, section);
+  }
+
+  List<Widget> makeAnswerString(Iterable<List<String>> myItems, int section) {
+    List<Widget> texts = [];
+    for (List<String> item in myItems) {
+      texts.add(Text(utf8.decode(item[section].runes.toList())));
+    }
+    return texts;
   }
 }

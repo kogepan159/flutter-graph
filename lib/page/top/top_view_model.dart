@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 import 'dart:html';
 
@@ -7,8 +6,11 @@ import 'package:file_picker/file_picker.dart';
 class TopViewModel {
   List<String> names = [];
   List<String> titles = [];
-  Future<List<List>> csvImport() async {
+  List<List<String>> items = [];
+  int counter = 0;
+  String? isSelectedItem = 'a';
 
+  Future<List<List>> csvImport() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       allowMultiple: true,
       type: FileType.custom,
@@ -22,17 +24,17 @@ class TopViewModel {
     final contacts = formater.split('\r');
     for (int i = 0; i < contacts.length - 1; i++) {
       final contactData = contacts[i].split(',');
-      if(i == 0 ){
+      if (i == 0) {
         for (String element in contactData) {
           titles.add(utf8.decode(element.runes.toList()));
         }
       } else {
         names.add(utf8.decode(contactData[1].runes.toList()));
-        print("contactData1: ${contactData[1]}");
-        print("contactData4: ${utf8.decode(contactData[4].runes.toList())}");
-        print("contactData5: ${contactData[5]}");
+        items.add(contactData);
       }
     }
+    names = names.toSet().toList();
+    isSelectedItem = names.first;
 
     // csvのタイトルを求める
     // 2列の名前でlistを作成する
