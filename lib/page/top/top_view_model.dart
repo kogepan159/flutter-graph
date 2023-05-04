@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'dart:html';
 
+import 'package:file_picker/_internal/file_picker_web.dart';
 import 'package:file_picker/file_picker.dart';
 
 class TopViewModel {
@@ -11,10 +11,11 @@ class TopViewModel {
   String? isSelectedItem = 'a';
 
   Future<List<List>> csvImport() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
+    FilePickerResult? result = await FilePickerWeb.platform.pickFiles(
       allowMultiple: false,
       type: FileType.custom,
       allowedExtensions: ['csv'],
+      withData: true,
     );
     names = [];
     titles = [];
@@ -38,13 +39,6 @@ class TopViewModel {
     }
     names = names.toSet().toList();
     isSelectedItem = names.first;
-
-    // csvのタイトルを求める
-    // 2列の名前でlistを作成する
-    // 3列目以降はグラフにする
-    // 数字に変更できない場合、List表示にする
-    // 全員と個別対応できるようにする
-
     return Future<List<List>>.value(importList);
   }
 }
