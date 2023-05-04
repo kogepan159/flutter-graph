@@ -6,7 +6,7 @@ import 'package:flutter_graph/page/top/top_page.dart';
 Future<void> main() async {
   // Firebase初期化
   await Firebase.initializeApp(
-    name: "ushare",
+    name: "flutter-graph",
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(const MyApp());
@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Flutter Graph',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),

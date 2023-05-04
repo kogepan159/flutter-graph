@@ -12,13 +12,16 @@ class TopViewModel {
 
   Future<List<List>> csvImport() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
-      allowMultiple: true,
+      allowMultiple: false,
       type: FileType.custom,
       allowedExtensions: ['csv'],
     );
+    names = [];
+    titles = [];
+    items = [];
     List<List> importList = [];
     if (result == null) return [];
-    var fileBytes = result.files.first.bytes;
+    var fileBytes = result.files.single.bytes;
     var formater = String.fromCharCodes(fileBytes!);
 
     final contacts = formater.split('\r');
