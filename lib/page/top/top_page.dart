@@ -82,13 +82,15 @@ class _TopPageState extends State<TopPage> {
         .where((element) => element[1] == viewModel.isSelectedItem);
 
     for (int i = 0; i < viewModel.titles.length - 1; i++) {
-      if(i == 1) continue;
-      items.add(Text(
-        viewModel.titles[i],
-        style: const TextStyle(
-          fontWeight: FontWeight.bold,
+      if (i < 2) continue;
+      items.add(
+        Text(
+          "【${viewModel.titles[i]}】",
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
         ),
-      ));
+      );
       items.add(const SizedBox(height: 8));
       // ignore: unnecessary_null_comparison
       if (double.tryParse(myItems.first[i]) != null) {
@@ -96,23 +98,28 @@ class _TopPageState extends State<TopPage> {
       } else {
         items += makeAnswerString(myItems, i);
       }
-      items.add(const SizedBox(height: 16));
+      items.add(const SizedBox(height: 32));
     }
     return items;
   }
 
   Widget makeAnswerGraph(Iterable<List<String>> myItems, int section) {
     List<double> records = [];
+    List<String> days = [];
     for (List<String> item in myItems) {
+      days.add(item.first);
       records.add(double.parse(item[section]));
     }
-    return  FlChart(records, section);
+    return FlChart(days, records, section);
   }
 
   List<Widget> makeAnswerString(Iterable<List<String>> myItems, int section) {
     List<Widget> texts = [];
+
     for (List<String> item in myItems) {
-      texts.add(Text(utf8.decode(item[section].runes.toList())));
+      final displayItem = utf8.decode(item[section].runes.toList());
+      texts.add(Text(
+          "${item.first}    ${displayItem.isEmpty ? "記録なし" : displayItem}"));
     }
     return texts;
   }
