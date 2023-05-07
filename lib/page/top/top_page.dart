@@ -81,7 +81,7 @@ class _TopPageState extends State<TopPage> {
     var myItems = viewModel.items
         .where((element) => element[1] == viewModel.isSelectedItem);
 
-    for (int i = 0; i < viewModel.titles.length - 1; i++) {
+    for (int i = 0; i < viewModel.titles.length; i++) {
       if (i < 2) continue;
       items.add(
         Text(
