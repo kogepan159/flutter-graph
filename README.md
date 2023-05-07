@@ -1,16 +1,15 @@
 # flutter_graph
 
-A new Flutter project.
+googleフォームの回答を人物ごとにまとめるサイトです。
 
-## Getting Started
+1. https://flutter-graph.web.app/#/
+2. 右下のファイルアップロードのボタンから、csvアップロードできます。
 
-This project is a starting point for a Flutter application.
+アップロードしたデータは表示するためのみ利用しています。
+他のところへの保存はしておりません。
+1入力一行になるように調整お願いします！
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+サンプルcsvは下記になります。
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+[test.csv](https://github.com/kogepan159/flutter-graph/files/11415079/test.csv)
